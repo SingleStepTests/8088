@@ -1,0 +1,5 @@
+decomp/
+processed/
+bad/
+validated/
+*.json/
