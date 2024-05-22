@@ -29,7 +29,7 @@ Instructions cycles end when the first byte of the next instruction is read from
 
 All bytes after the initial instruction bytes are set to 0x90 (144) (NOP). Therefore, the queue contents at the end of all tests will contain only NOPs, with a maximum of 3 (since one has been read out).
 
-String instructions may randomly be prepended by a REP or REPE instruction prefix. In this event, CX is masked to 7 bits to produce reasonably sized tests (A string instruction with CX==65535 would be over a million cycles in execution).
+String instructions may randomly be prepended by a REP, REPE or REPNE instruction prefix. In this event, CX is masked to 7 bits to produce reasonably sized tests (A string instruction with CX==65535 would be over a million cycles in execution).
 
 ### Test Format
 
@@ -116,8 +116,8 @@ The 'final' keys contain changes to registers and memory, and the state of the q
  - Registers and memory locations that are unchanged from the initial state are not included in the final state.
  - The entire value of 'flags' is provided if any flag has changed.
 
-The 'hash' key is a SHA1 hash of the test json. It should uniquely identify any test in the suite.
-THe 'idx' key is the numerical index of the test within the test file.
+The 'hash' key is a SHA1 hash of the test JSON. It should uniquely identify any test in the suite.
+The 'idx' key is the numerical index of the test within the test file.
 
 ### Cycle Format
 
@@ -133,7 +133,7 @@ The 'cycles' list contains sub lists, each corresponding to a single CPU cycle. 
  - BHE (Byte high enable) status
  - data bus
  - bus status
- - t-state
+ - T-state
  - queue operation status
  - queue byte read
 
@@ -145,16 +145,16 @@ The memory status field represents outputs of the attached i8288 Bus Controller.
 
 The IO status field represents outputs of the attached i8288 Bus Controller. From left to right, this field will contain RAW or ---.  R represents the IORC status line. A represents the AIOWC status line. W represents the IOWC status line. These status lines are active-low. An IO read will occur on T3 or the last Tw t-state when IORC is active. An IO write will occur on T3 or the last Tw t-state when AIOWC is active. At this point, the value of the data bus field will be valid and will represent the byte read or written.
 
-The BHE status indicates whether a 16-bit data transfer is occurring. This pin does not exist on the 8088 but is provided to make the test set comptable with an set 
+The BHE status indicates whether a 16-bit data transfer is occurring. This pin does not exist on the 8088 but is provided to make the test set comptable with any set 
 that may be produced for the 8086 in the future.
 
 The data bus indicates the value of the last 8 bits of the multiplexed bus. It is typically only valid on T3. 
 
-The bus status lines indicate the type of bus m-cycle currently in operation. Either INTA, IOR, IOW, MEMR, MEMW, HALT, CODE, or PASV.  These states represent the S0, S1 and S2 status lines of the 8088.
+The bus status lines indicate the type of bus m-cycle currently in operation. Either INTA, IOR, IOW, MEMR, MEMW, HALT, CODE, or PASV.  These states represent the S0-S2 status lines of the 8088.
 
-The t-state is the current t-state of the CPU. Since this state is not exposed by the CPU, it is calculated based on bus activity.
+The T-state is the current T-state of the CPU. Since this state is not exposed by the CPU, it is calculated based on bus activity.
 
-The queue operation status will contain either F, S, E or -. F indicates a "First Byte" of an instruction or instruction prefix has been read.  S indicates a "Subsequent" byte of an instruction has been read - either a modrm, displacement, or operand. E indicates that the instruction queue has been Emptied/Flushed. All queue operation statuses reflect an operation that actually occurred on the previous cycle.  This field represents the QS0 and QS1 status lines of the 8088. 
+The queue operation status will contain either F, S, E or -. F indicates a "First Byte" of an instruction or instruction prefix has been read.  S indicates a "Subsequent" byte of an instruction has been read - either a modr/m, displacement, or operand. E indicates that the instruction queue has been Emptied/Flushed. All queue operation statuses reflect an operation that actually occurred on the previous cycle.  This field represents the QS0 and QS1 status lines of the 8088. 
 
 When the queue operation status is not '-', then the value of the queue byte read field is valid and represents the byte read from the queue. 
 
