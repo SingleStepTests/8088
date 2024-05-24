@@ -125,7 +125,7 @@ If you are not interested in writing a cycle-accurate emulator, you can ignore t
 
 The 'cycles' list contains sub lists, each corresponding to a single CPU cycle. Each contains several fields. From left to right, the cycle fields are:  
 
- - ALE status
+ - Pin bitfield
  - address latch
  - segment status
  - memory status
@@ -137,7 +137,11 @@ The 'cycles' list contains sub lists, each corresponding to a single CPU cycle. 
  - queue operation status
  - queue byte read
 
-The ALE line (Address Latch Enable) is asserted on T1 to instruct the PC's address latches to store the current address. This is necessary since the address and data lines of the 8088 are multiplexed, and a full, valid address is only on the bus while ALE is asserted.  Thus the second column represents the value of the address latch, and not the address bus itself (which may not be valid in a given cycle).
+The first column is a bitfield representing certain chip pin states. 
+
+ - Bit #0 of this field represents the ALE (Address Latch Enable) pin output, which in Maximum Mode is output by the i8288. This signal is asserted on T1 to instruct the PC's address latches to store the current address. This is necessary since the address and data lines of the 8088 are multiplexed, and a full, valid address is only on the bus while ALE is asserted. Thus the second column represents the value of the address latch, and not the address bus itself (which may not be valid in a given cycle).
+ - Bit #1 of this field represents the INTR pin input. This is not currently exercised, but may be in future test releases.
+ - Bit #2 of this field represents the NMI pin input. This is not currently exercised, but may be in future test releases.
 
 The segment status indicates which segment is in use to calculate addresses by the CPU, using segment-offset addressing. This field represents the S3 and S4 status lines of the 8088.
 
