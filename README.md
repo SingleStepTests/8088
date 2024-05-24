@@ -176,7 +176,8 @@ Note that these tests include many undocumented/undefined opcodes and instructio
  - **E4,E5,EC,ED**: All forms of the IN instruction should return 0xFF on IO read.
  - **F0, F1**: The LOCK prefix is not exercised in this test set.
  - **F4**: HALT is not included in this test set.
- - **D4, F6.6, F6.7, F7.6, F7.7** - These instructions can generate divide exceptions. When this occurs, cycle traces continue until the first byte of the exception handler is fetched and read from the queue. The IVT entry for INT0 is set up to point to 1024 (0400h).
+ - **F6.6, F6.7, F7.6, F7.7** - These instructions can generate a divide exception (more accurately, a Type-0 Interrupt). When this occurs, cycle traces continue until the first byte of the exception handler is fetched and read from the queue. The IVT entry for INT0 is set up to point to 1024 (0400h).
+     - NOTE: On the 8088 specifically, the return addressed pushed to the stack on divide exception is the address of the next instruction. This differs from the behavior of later CPUs and generic Intel IA-32 emulators.
  - **F6.7, F7.7** - Presence of a REP prefix preceding IDIV will invert the sign of the quotient, therefore REP prefixes are prepended to 10% of IDIV tests. This was only recently discovered by reenigne.
  - **FE**: The forms with reg field 2-7 are undefined and are not included in this initial release.
  
