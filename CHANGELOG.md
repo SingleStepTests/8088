@@ -1,3 +1,6 @@
+## v1.2.1 5/25/2024
+ - Fixed some final IP addresses formatted as negative decimals
+
 ## v1.2.0 5/9/2024
  - Renamed 8088.json to metadata.json, moved opcodes to 'opcodes' key of parent object, and added additional metadata fields to parent object.
  - Renamed 'test_hash' key to 'hash' and 'test_num' key to 'idx'

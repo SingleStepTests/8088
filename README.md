@@ -1,6 +1,6 @@
 ## 8088 V1
 
-### Current version: 1.2.0
+### Current version: 1.2.1
 
 This is a set of 8088 CPU tests produced by Daniel Balsom and Folkert van Heusden using the [Arduino8088](https://github.com/dbalsom/arduino_8088) interface and the [MartyPC](https://github.com/dbalsom/martypc) emulator.
 
