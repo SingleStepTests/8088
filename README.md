@@ -65,13 +65,11 @@ Random segment override prefixes have been prepended to a percentage of instruct
 
 ### String Prefixes
 
-String instructions may be randomly prepended by a REP, REPE, REPNE, REPC or REPNC instruction prefix. In this event, CX is masked to 7 bits to produce reasonably sized tests (A string instruction with CX==65535 would be over a million cycles in execution). 
-- If you are not specifically writing a V20 emulator, you will want to filter out tests that utilize REPC and REPNC prefixes.
+String instructions may be randomly prepended by a REP, REPE, REPNE instruction prefix. In this event, CX is masked to 7 bits to produce reasonably sized tests (A string instruction with CX==65535 would be over a million cycles in execution). 
 
 ### Instruction Prefetching
 
 All bytes fetched after the initial instruction bytes are set to 0x90 (144) (NOP). Therefore, the queue contents at the end of all tests will contain only NOPs, with a maximum of 3 (since one has been read out).
-
 
 ### Test Format
 
@@ -234,10 +232,10 @@ If you are not interested in emulating the undefined behavior of the 8088, you c
 ```json
 {
     "url": "https://github.com/SingleStepTests/8088/",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "syntax_version": 2,
     "cpu": "8088",
-    "cpu_detail": "Harris 80C88",
+    "cpu_detail": "AMD D8088 8441DMA (C)1982",
     "generator": "arduino8088",
     "date": "2024",
     "opcodes": {
