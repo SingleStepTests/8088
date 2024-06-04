@@ -1,3 +1,9 @@
+## V2.0.0
+ - Generated new test set, V2. 
+ - Switched CPU types to AMD D8088
+ - Tests now exercise the 8088's prefetch queue.
+ - Tests now properly include undefined flag state from the CPU.
+
 ## v1.2.1 5/25/2024
  - Fixed some final IP addresses formatted as negative decimals
 
