@@ -908,8 +908,8 @@
                 },
                 "6": {
                     "status": "undocumented",
-                    "flags": ".....a..",
-                    "flags-mask": 65519
+                    "flags": "o..szapc",
+                    "flags-mask": 63274
                 },
                 "7": {
                     "status": "normal",
@@ -944,8 +944,8 @@
                 },
                 "6": {
                     "status": "undocumented",
-                    "flags": ".....a..",
-                    "flags-mask": 65519
+                    "flags": "o..szapc",
+                    "flags-mask": 63274
                 },
                 "7": {
                     "status": "normal",
@@ -957,88 +957,72 @@
         "D2": {
             "reg": {
                 "0": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "1": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "2": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "3": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "4": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 },
                 "5": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 },
                 "6": {
                     "status": "undocumented",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": "o..szapc",
+                    "flags-mask": 63274
                 },
                 "7": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 }
             }
         },
         "D3": {
             "reg": {
                 "0": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "1": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "2": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "3": {
-                    "status": "normal",
-                    "flags": "o.......",
-                    "flags-mask": 63487
+                    "status": "normal"
                 },
                 "4": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 },
                 "5": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 },
                 "6": {
                     "status": "undocumented",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": "o..szapc",
+                    "flags-mask": 63274
                 },
                 "7": {
                     "status": "normal",
-                    "flags": "o....a.c",
-                    "flags-mask": 63470
+                    "flags": ".....a..",
+                    "flags-mask": 65519
                 }
             }
         },

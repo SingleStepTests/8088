@@ -2,7 +2,7 @@
 
 This is a set of 8088 CPU tests produced by Daniel Balsom using the [Arduino8088](https://github.com/dbalsom/arduino_8088) interface and the [MartyPC](https://github.com/dbalsom/martypc) emulator.
 
-### Current version: 2.0.0
+### Current version: 2.0.1
 
  - The ```v1``` directory contains the older 1.X version of this test suite. It is retained for reference only. I encourage everyone to use V2 of the test suite.
  - The ```v2``` directory contains the current version of the 8088 test suite.

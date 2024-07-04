@@ -1,3 +1,7 @@
+## V2.0.1 7/4/2024
+ - Updated metadata.json to correct undefined flag states.
+ - Added v2_undefined test set.
+
 ## V2.0.0
  - Generated new test set, V2. 
  - Switched CPU types to AMD D8088
