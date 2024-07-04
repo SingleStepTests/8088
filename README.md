@@ -6,6 +6,7 @@ This is a set of 8088 CPU tests produced by Daniel Balsom using the [Arduino8088
 
  - The ```v1``` directory contains the older 1.X version of this test suite. It is retained for reference only. I encourage everyone to use V2 of the test suite.
  - The ```v2``` directory contains the current version of the 8088 test suite.
+ - The ```v2_undefined``` directory contains a set of test for certain undefined instruction forms that are tricky and less useful to emulate.
 
 ### Changes from 8088 Test Suite V1
 
