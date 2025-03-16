@@ -8,7 +8,7 @@ Up for the challenge? See if you can pass these tests.
 
 ### Update 2025-03-16:
 
- - As it turns out, the group opcodes 3 and 5, CALL FAR and JUMP FAR, cannot be traditionally emulated when register operands are specified.
+ - As it turns out, the group sub-opcodes 3 and 5 of FE and FF, CALL FAR and JUMP FAR, cannot be traditionally emulated when register operands are specified.
    Due to assumptions made by the microcode, these routines use the state of internal registers (IND, tmpb and tmpa) that are uninitialized when the address calculation to fetch a memory operand 
    is not peformed. 
 
