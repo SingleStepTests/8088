@@ -1,32 +1,4 @@
-#
-#    MartyPC
-#    https://github.com/dbalsom/martypc
-#
-#    Copyright 2022-2024 Daniel Balsom
-#
-#    Permission is hereby granted, free of charge, to any person obtaining a
-#    copy of this software and associated documentation files (the “Software”),
-#    to deal in the Software without restriction, including without limitation
-#    the rights to use, copy, modify, merge, publish, distribute, sublicense,
-#    and/or sell copies of the Software, and to permit persons to whom the
-#    Software is furnished to do so, subject to the following conditions:
-#
-#    The above copyright notice and this permission notice shall be included in
-#    all copies or substantial portions of the Software.
-#
-#    THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-#    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-#    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-#    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER   
-#    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-#    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-#    DEALINGS IN THE SOFTWARE.
-#
-#    ---------------------------------------------------------------------------
-#
-#    /tests/tools/condense.py
-#    Condense JSON test files output by MartyPC by combining certain fields into
-#    single lines.
+# Condense JSON test files output by combining certain fields into single lines.
 
 import json
 import os
@@ -48,23 +20,26 @@ def condense(filename):
         data = json.load(file)
 
     # Iterate over each object in the array
-    for item in data:
+    for idx, item in enumerate(data):
         # Convert the 'bytes' field to a string
         if "bytes" in item:
             item["bytes"] = list_to_str(item["bytes"])
 
         # Convert each internal list of 'ram' field to a string
-        if "ram" in item["initial"]:
-            item["initial"]["ram"] = [list_to_str(sublist) for sublist in item["initial"]["ram"]]
-        
-        if "ram" in item["final"]:
-            item["final"]["ram"] = [list_to_str(sublist) for sublist in item["final"]["ram"]]
-        
-        if "queue" in item["initial"]:
-            item["initial"]["queue"] = list_to_str(item["initial"]["queue"])
-
-        if "queue" in item["final"]:
-            item["final"]["queue"] = list_to_str(item["final"]["queue"])
+        if not isinstance(item.get("initial"), dict):
+            print(f"Warning: 'initial' field is not a dict at item index {idx}")       
+        else:
+            if "ram" in item["initial"]:
+                item["initial"]["ram"] = [list_to_str(sublist) for sublist in item["initial"]["ram"]]
+            if "queue" in item["initial"]:
+                item["initial"]["queue"] = list_to_str(item["initial"]["queue"])
+        if not isinstance(item.get("final"), dict):
+            print(f"Warning: 'final' field is not a dict at item index {idx}")       
+        else:
+            if "ram" in item["final"]:
+                item["final"]["ram"] = [list_to_str(sublist) for sublist in item["final"]["ram"]]
+            if "queue" in item["final"]:
+                item["final"]["queue"] = list_to_str(item["final"]["queue"])
 
         if "cycles" in item:
 
@@ -123,6 +98,7 @@ def main():
     
     # Iterate through each JSON file in the specified folder
     for json_file in glob.glob(os.path.join(folder_path, '*.json')):
+        print(f"Condensing file {json_file}...")
         condense(json_file)
 
 if __name__ == '__main__':

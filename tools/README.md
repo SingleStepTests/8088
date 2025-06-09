@@ -18,3 +18,9 @@ These are some miscellaneous Python utilities for working with JSON test suites.
     - This utility will report flag changes observed in all test files within a directory.
 - condense.py 
     - This utility will pretty-print a JSON test file in a condensed format.
+- convert_binary.py
+    - This utility will convert tests in JSON format to binary MOO format.
+- viewer.py
+    - A simple example of showing a JSON test in a more easily readable format, with a table of cycle states, and values in hexadecimal.
+- moo_parser.c
+    - C example code for parasing the MOO binary test format.
