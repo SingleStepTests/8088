@@ -6,6 +6,7 @@ This is a set of 8088 CPU tests produced by Daniel Balsom using the [Arduino8088
 
  - The ```v1``` directory contains the older 1.X version of this test suite. It is retained for reference only. I encourage everyone to use V2 of the test suite.
  - The ```v2``` directory contains the current version of the 8088 test suite.
+ - The ```v2_binary`` directory contains the the test suite in a binary format, MOO, gzipped.
  - The ```v2_undefined``` directory contains a set of test for certain undefined instruction forms that are tricky and less useful to emulate.
 
 ### Changes from 8088 Test Suite V1
@@ -54,6 +55,8 @@ The simplest way to run each test is to override your emulated CPU's normal rese
 
 - Once you read the first instruction byte out of the queue to begin test execution, prefetching should be resumed since there is now room in the queue. It takes two cycles to begin a fetch after reading from a full queue, therefore tests that specify an initial queue state will start with two 'Ti' cycle states.
 
+- If you're not interested in per-cycle validation, you can ignore the queue fields entirely.
+
 ### Why Are Instructions Longer Than Expected?
 
 Instruction cycles begin from the cycle in which the CPU's queue status lines indicate that an instruction "First Byte" has been fetched - this may be an optional instruction prefix, in which case there will be multiple First Byte statuses until the first byte that is a non-prefixed opcode byte is read. If the test is starting from an empty prefetch queue, the final opcode byte and any modrm or displacement must be read from the bus before instruction execution can begin.
@@ -73,6 +76,13 @@ String instructions may be randomly prepended by a REP, REPE, REPNE instruction 
 All bytes fetched after the initial instruction bytes are set to 0x90 (144) (NOP). Therefore, the queue contents at the end of all tests will contain only NOPs, with a maximum of 3 (since one has been read out).
 
 ### Test Format
+
+The 8086 test suite comes in two formats, JSON and a simple chunked binary format I call `MOO` (Machine Opcode Operation).
+If your language of choice lacks great options for parsing JSON (such as C) you may prefer the binary format tests.
+
+You can find more information about the binary format in README.md in the /v2_binary directory. There is also an example MOO parser in C under the /tools directory.
+
+Information on the JSON format proceeds below.
 
 Sample test:
 ```json
@@ -149,33 +159,32 @@ Sample test:
     "idx": 0
 },
 ```
-The 'name' field is a user-readable disassembly of the instruction.
-The 'bytes' list contains the instruction bytes that make up the full instruction.
-The 'initial' keys contain the register, memory and queue states before instruction execution.
-The 'final' keys contain changes to registers and memory, and the state of the queue after instruction execution.
- - Registers and memory locations that are unchanged from the initial state are not included in the final state.
- - The entire value of 'flags' is provided if any flag has changed.
-
-The 'hash' key is a SHA1 hash of the test JSON. It should uniquely identify any test in the suite.
-The 'idx' key is the numerical index of the test within the test file.
+- `name`: A user-readable disassembly of the instruction.
+- `bytes`: The raw bytes that make up the instruction.
+- `initial`: The register, memory and instruction queue state before instruction execution.
+- `final`: Changes to registers and memory, and the state of the instruction queue after instruction execution.
+    - Registers and memory locations that are unchanged from the initial state are not included in the final state.
+    - The entire value of `flags` is provided if any flag has changed.
+- `hash`: A SHA1 hash of the test JSON. It should uniquely identify any test in the suite.
+- `idx`: The numerical index of the test within the test file.
 
 ### Cycle Format
 
 If you are not interested in writing a cycle-accurate emulator, you can ignore this section.
 
-The 'cycles' list contains sub lists, each corresponding to a single CPU cycle. Each contains several fields. From left to right, the cycle fields are:  
+The `cycles` list contains sub lists, each corresponding to a single CPU cycle. Each contains several fields. From left to right, the cycle fields are:  
 
  - Pin bitfield
- - address latch
- - segment status
- - memory status
+ - Multiplexed bus
+ - Segment status
+ - Memory status
  - IO status
  - BHE (Byte high enable) status
- - data bus
- - bus status
+ - Data bus
+ - Bus status
  - T-state
- - queue operation status
- - queue byte read
+ - Queue operation status
+ - Queue byte read
 
 The first column is a bitfield representing certain chip pin states. 
 
@@ -183,14 +192,15 @@ The first column is a bitfield representing certain chip pin states.
  - Bit #1 of this field represents the INTR pin input. This is not currently exercised, but may be in future test releases.
  - Bit #2 of this field represents the NMI pin input. This is not currently exercised, but may be in future test releases.
 
+Tne Multiplexed bus value is the 20-bit value representing the entire bus read directly from the CPU each cycle. It contains a valid address only when ALE is asserted on T1.
+
 The segment status indicates which segment is in use to calculate addresses by the CPU, using segment-offset addressing. This field represents the S3 and S4 status lines of the 8088.
 
 The memory status field represents outputs of the attached i8288 Bus Controller. From left to right, this field will contain RAW or ---.  R represents the MRDC status line, A represents the AMWC status line, and W represents the MWTC status line. These status lines are active-low. A memory read will occur on T3 or the last Tw t-state when MRDC is active. A memory write will occur on T3 or the last Tw t-state when AMWC is active. At this point, the value of the data bus field will be valid and will represent the byte read or written.
 
 The IO status field represents outputs of the attached i8288 Bus Controller. From left to right, this field will contain RAW or ---.  R represents the IORC status line. A represents the AIOWC status line. W represents the IOWC status line. These status lines are active-low. An IO read will occur on T3 or the last Tw t-state when IORC is active. An IO write will occur on T3 or the last Tw t-state when AIOWC is active. At this point, the value of the data bus field will be valid and will represent the byte read or written.
 
-The BHE status indicates whether a 16-bit data transfer is occurring. This pin does not exist on the 8088 but is provided to make the test set comptable with any set 
-that may be produced for the 8086 in the future.
+The BHE status pin on the 8086 indicates whether the upper byte of the data bus is driven. This pin does not exist on the 8088, but is provided in the test format for compatibility with the [8086 Test Suite](https://github.com/SingleStepTests/8086).
 
 The data bus indicates the value of the last 8 bits of the multiplexed bus. It is typically only valid on T3. 
 
@@ -222,9 +232,9 @@ Note that these tests include many undocumented/undefined opcodes and instructio
  - **F0, F1**: The LOCK prefix is not exercised in this test set.
  - **F4**: HALT is not included in this test set.
  - **D4, F6.6, F6.7, F7.6, F7.7** - These instructions can generate a divide exception (more accurately, a Type-0 Interrupt). When this occurs, cycle traces continue until the first byte of the exception handler is fetched and read from the queue. The IVT entry for INT0 is set up to point to 1024 (0400h).
-     - NOTE: On the 8088 specifically, the return addressed pushed to the stack on divide exception is the address of the next instruction. This differs from the behavior of later CPUs and generic Intel IA-32 emulators.
+     - NOTE: On the 8088 specifically, the return address pushed to the stack on divide exception is the address of the next instruction. This differs from the behavior of later CPUs and generic Intel IA-32 emulators.
  - **F6.7, F7.7** - Presence of a REP prefix preceding IDIV will invert the sign of the quotient, therefore REP prefixes are prepended to 10% of IDIV tests. This was only recently discovered by reenigne.
- - **FE**: The forms with reg field 2-7 are undefined and are not included in this initial release.
+ - **FE**: The forms with reg field 2-7 are undefined and are not included.
 
 ### metadata.json
 

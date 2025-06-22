@@ -3,3 +3,6 @@ processed/
 bad/
 validated/
 *.json/
+tools/test
+v2_binary/*.MOO
+v2_binary/*/*.MOO
