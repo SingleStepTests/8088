@@ -24,7 +24,7 @@ Each chunk has the following structure:
 |-------------|--------------|------------------------------------------|
 | Chunk Type  | 4            | File ID `MOO ` (note the trailing space) |
 | Chunk Length| 4            | uint32 size of chunk data |
-| Version     | 1            | uint32 File Version       |
+| Version     | 1            | uint8 File Version       |
 | Reserved    | 3            | 3 bytes reserved          |
 | Test Count  | 4            | uint32 Number of tests in file |
 | CPU Name    | 4            | ASCII ID of CPU being tested, padded with spaces |
