@@ -229,5 +229,6 @@ An octal value representing the bus status as reported by the CPU's S0-S2 status
 ### Memory and IO Status Bitfields (`memory_status` and `io_status`)
 
 - Each is a 3-bit bitfield, representing the Write, Advanced Read, and Read signals, from Bit 0 to Bit 2.
+- Advanced Read signals are not used on 80286.
 ---
 
