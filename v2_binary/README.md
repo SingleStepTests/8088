@@ -18,6 +18,9 @@ Each chunk has the following structure:
 | Chunk Length| 4            | uint32 size of chunk data |
 | Chunk Data  | Variable     | Chunk payload bytes as described below  |
 
+A conforming parser should use the chunk length field to advance to the next chunk - it SHOULD NOT assume that the 
+next chunk immediately follows the previous.
+
 ## File-header Chunk: `MOO `
 
 | Field       | Size (bytes) | Description                              |
@@ -30,7 +33,7 @@ Each chunk has the following structure:
 | CPU Name    | 4            | ASCII ID of CPU being tested, padded with spaces |
 ---
 
-The `MOO ` header is at least 12 bytes as of file version 1, but may grow in future versions. 
+The `MOO ` header payload is at least 12 bytes as of file version 1, but may grow in future versions. 
 The current version of `MOO ` is version 1. Additional chunk types may be added without
 incrementing the format version. Version increments will be reserved for changes to existing 
 chunk types. A conforming parser should ignore chunk types it does not recognize. 
