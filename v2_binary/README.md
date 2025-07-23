@@ -205,13 +205,13 @@ An octal value representing the bus status as reported by the CPU's S0-S2 status
 
 ### T-State (`t_state`)
 
-| Value | Meaning |
-|-------|---------|
-| 0     | "Ti"    |
-| 1     | "T1"    |
-| 2     | "T2"    |
-| 3     | "T3"    |
-| 4     | "T4"    |
+| Value | 808X Meaning | 80286 Meaning |
+|-------|---------|--------------|
+| 0     | "Ti"    | "Ti" |
+| 1     | "T1"    | "Ts" |
+| 2     | "T2"    | "Tc  |
+| 3     | "T3"    | "--" |
+| 4     | "T4"    | "--" |
 
 ---
 
