@@ -39,6 +39,12 @@ chunk types. A conforming parser should ignore chunk types it does not recognize
 
 Each `TEST` chunk represents a single CPU test case, containing multiple **subchunks**, concatenated.
 
+| Field       | Size (bytes) | Description                              |
+|-------------|--------------|------------------------------------------|
+| Chunk Type | 4          | ASCII string `TEST` |
+| Chunk Length | 4        | Length of payload containing 'index' field and all following subchunks |
+| Index      | 4          | 0-based index of test in file |
+
 ---
 
 ## Subchunks inside a `TEST`
@@ -49,7 +55,6 @@ Each subchunk inside the `TEST` chunk is:
 |-------------|--------------|------------------------------------------|
 | Chunk Type | 4          | ASCII string identifier (`NAME`, `BYTS`, `INIT`, `FINA`, `CYCL`, `HASH`, `IDX `) |
 | Chunk Length | 4        | Length of payload |
-| Index      | 4          | 0-based index of test in file |
 | Chunk Data | Variable   | Payload bytes as described in the following sections |
 
 ---
@@ -66,6 +71,8 @@ Each subchunk inside the `TEST` chunk is:
 | Length     | 4            | uint32 length of name in bytes |
 | Name String     | Variable     | ASCII encoded test name |
 
+The `NAME` chunk has a redundant length field to accomodate expansion. 
+
 ---
 
 ### 2. `BYTS`
@@ -78,12 +85,20 @@ Each subchunk inside the `TEST` chunk is:
 | Length    | 4            | uint32 number of bytes |
 | Bytes          | Variable     | Raw byte values |
 
+The `BYTS` chunk has a redundant length field to accomodate expansion.
+
 ---
 
 ### 3. `INIT` and `FINA`
 
+| Field       | Size (bytes) | Description                              |
+|-------------|--------------|------------------------------------------|
+| Chunk Type | 4          | ASCII string `INIT` or `FINA` |
+| Chunk Length | 4        | Length of payload containing all following subchunks |
+| Payload  | variable | `REGS`, `RAM `, `QUEU` subchunks |
+
 - CPU state snapshots (initial and final).
-- Composed of concatenated subchunks:
+- Payload consists of further subchunks:
 
 | Subchunk Type | Description         |
 |---------------|---------------------|
