@@ -9,8 +9,7 @@ Up for the challenge? See if you can pass these tests.
 ### Update 2025-03-16:
 
  - As it turns out, the group sub-opcodes 3 and 5 of FE and FF, CALL FAR and JUMP FAR, cannot be traditionally emulated when register operands are specified.
-   Due to assumptions made by the microcode, these routines use the state of internal registers (IND, tmpb and tmpa) that are uninitialized when the address calculation to fetch a memory operand 
-   is not peformed. 
+   Due to assumptions made by the microcode, these routines use the state an internal register (tmpb) that is uninitialized.
 
    This means that these instructions leak the internal state of registers via the address used to fetch the new segment, and the values used to set the new code segment and program counter.
    The test suite does not give you enough information to determine what these values should be. The values observed in the test suite are no doubt influenced by the CPU register set up and queue 
