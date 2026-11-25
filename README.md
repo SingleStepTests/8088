@@ -6,14 +6,14 @@ This is a set of 8088 CPU tests produced by Daniel Balsom using the [Arduino8088
 
  - The ```v1``` directory contains the older 1.X version of this test suite. It is retained for reference only. I encourage everyone to use V2 of the test suite.
  - The ```v2``` directory contains the current version of the 8088 test suite.
- - The ```v2_binary`` directory contains the the test suite in a binary format, MOO, gzipped.
+ - The ```v2_binary``` directory contains the the test suite in a binary format, MOO, gzipped.
  - The ```v2_undefined``` directory contains a set of test for certain undefined instruction forms that are tricky and less useful to emulate.
 
 ### Changes from 8088 Test Suite V1
 
 V2 introduces a few changes to the test format and conventions.
 
- - The address column in the 'cycles' array is now represents the state of the address/data bus per-cycle. It is up to you to latch the address on ALE if you wish.
+ - The address column in the 'cycles' array now represents the state of the address/data bus per-cycle. It is up to you to latch the address on ALE if you wish.
    Having the cycle-accurate output of the bus lines enables more accurate emulation verification.
  - The values for 'ram' are no longer sorted by address; but should appear in the order in which they were accessed.
  - The final state only includes memory and register values that have changed. The entire flags register is included if any flag has changed.
@@ -192,7 +192,7 @@ The first column is a bitfield representing certain chip pin states.
  - Bit #1 of this field represents the INTR pin input. This is not currently exercised, but may be in future test releases.
  - Bit #2 of this field represents the NMI pin input. This is not currently exercised, but may be in future test releases.
 
-Tne Multiplexed bus value is the 20-bit value representing the entire bus read directly from the CPU each cycle. It contains a valid address only when ALE is asserted on T1.
+The Multiplexed bus value is the 20-bit value representing the entire bus read directly from the CPU each cycle. It contains a valid address only when ALE is asserted on T1.
 
 The segment status indicates which segment is in use to calculate addresses by the CPU, using segment-offset addressing. This field represents the S3 and S4 status lines of the 8088.
 
@@ -223,12 +223,13 @@ Note that these tests include many undocumented/undefined opcodes and instructio
  - **0F**: POP CS is temporarily omitted from V2 of the test set.
  - **8F**: The behavior of 8F with reg != 0 is undefined. If you can figure out the rules governing its behavior, please let us know.
  - **9B**: WAIT is not included in this test set.
- - **8C,8E**: These instructions are only defined for a reg value of 0-3, however only the first two bits are checked, so the test set contains random values for reg.
- - **8D,C4,C5**: 'r, r' forms of LEA, LES, LDS are undefined. These forms are not included in this test set due to disruption of the last calculated EA by the CPU set up routine.
- - **A4-A7,AA-AF**: CX is masked to 7 bits. This provides a reasonable test length, as the full 65535 value in CX with a REP prefix could result in over one million cycles.
- - **C6,C7**: Although the reg != 0 forms of these instructions are officially undefined, this field is ignored. Therefore, the test set contains random values for reg.
- - **D2,D3**: CL is masked to 6 bits. This shortens the possible test length, while still hopefully catching the case where CL is improperly masked to 5 bits (186+ behavior).
- - **E4,E5,EC,ED**: All forms of the IN instruction should return 0xFF on IO read.
+ - **8C, 8E**: These instructions are only defined for a reg value of 0-3, however only the first two bits are checked, so the test set contains random values for reg.
+ - **8D, C4, C5**: 'r, r' forms of LEA, LES, LDS are undefined. These forms are not included in this test set due to disruption of the last calculated EA by the CPU set up routine.
+ - **A4-A7, AA-AF**: CX is masked to 7 bits. This provides a reasonable test length, as the full 65535 value in CX with a REP prefix could result in over one million cycles.
+ - **C6, C7**: Although the reg != 0 forms of these instructions are officially undefined, this field is ignored. Therefore, the test set contains random values for reg.
+ - **D2, D3**: CL is masked to 6 bits. This shortens the possible test length, while still hopefully catching the case where CL is improperly masked to 5 bits (186+ behavior).
+ - **E4, EC**: The byte forms of the IN instruction should return 0xFF on IO read.
+ - **E5, ED**: The word forms of the IN instruction should return 0xFFFF on IO read.
  - **F0, F1**: The LOCK prefix is not exercised in this test set.
  - **F4**: HALT is not included in this test set.
  - **D4, F6.6, F6.7, F7.6, F7.7** - These instructions can generate a divide exception (more accurately, a Type-0 Interrupt). When this occurs, cycle traces continue until the first byte of the exception handler is fetched and read from the queue. The IVT entry for INT0 is set up to point to 1024 (0400h).
@@ -280,4 +281,3 @@ An opcode may have a 'reg' field which will be an object of opcode extensions/re
 ### Special Thanks
 
 Thanks to Folkert van Heusden for his assistance in generating the V1 test suite.
-
